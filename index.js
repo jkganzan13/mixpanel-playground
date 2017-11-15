@@ -1,6 +1,8 @@
 const Mixpanel = require('mixpanel');
-const { TOKEN } = require('./secret');
+const { TOKEN, ANALYTICS } = require('./secret');
+var Analytics = require('analytics-node');
 
+var analytics = new Analytics(ANALYTICS);
 const mixpanel = Mixpanel.init(TOKEN, {debug:true});
 
 const track = (event, properties) => {
@@ -8,15 +10,22 @@ const track = (event, properties) => {
 	return mixpanel.track(event, properties)
 };
 
-const event = 'test_event';
-const customerId = 100015951; //BroTown
-const ipifnyId = '3c48b7ab-3855-4a5e-b6a6-02f0b27f8718';
+const event = 'email_click';
+const customerId = 100015947; //BroTown
+const ipifnyId = 'A9A657DA-8FBA-47E9-82FB-7DDA4467639E';
 
 //These are the required properties
 //You can add more properties if you wish.
 const properties = {
 	distinct_id: customerId,
-	organizationId: `ip_${ipifnyId}`
+	organizationId: `ip_${ipifnyId}`,
+	email: 'from_test@gmail.com',
 };
 
 track(event, properties);
+
+analytics.track({
+	userId: 100015947,
+	event: event,
+	properties
+});
